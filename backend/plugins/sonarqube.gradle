@@ -7,6 +7,7 @@ sonarqube {
     property "sonar.projectVersion", rootProject.version
     property "sonar.host.url", System.getenv("SONARQUBE_HOST")
     property "sonar.login", System.getenv("SONARQUBE_TOKEN")
+    property "sonar.organization", System.getenv("SONARQUBE_ORGANIZATION")
     property "sonar.sourceEncoding", "UTF-8"
     property "sonar.scm.provider", "git"
     property "sonar.buildbreaker.skip", true
