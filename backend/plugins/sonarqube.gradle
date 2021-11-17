@@ -2,22 +2,18 @@ apply plugin: "org.sonarqube"
 
 sonarqube {
   properties {
-    property "sonar.projectName", rootProject.name
-    property "sonar.projectKey", rootProject.name
-    property "sonar.projectVersion", rootProject.version
+    property "sonar.projectName", "arthurfnsc_demo_backend"
+    property "sonar.projectKey", "arthurfnsc_demo_backend"
+    property "sonar.projectVersion", "latest"
     property "sonar.host.url", System.getenv("SONARQUBE_HOST")
     property "sonar.login", System.getenv("SONARQUBE_TOKEN")
     property "sonar.organization", System.getenv("SONARQUBE_ORGANIZATION")
-    property "sonar.sourceEncoding", "UTF-8"
-    property "sonar.scm.provider", "git"
-    property "sonar.buildbreaker.skip", true
     property "sonar.dependencyCheck.xmlReportPath", "build/reports/dependencyCheck/dependency-check-report.xml"
     property "sonar.dependencyCheck.htmlReportPath", "build/reports/dependencyCheck/dependency-check-report.html"
-    property "sonar.exclusions", [
-      "build/**",
-      "**/configurations/**",
-      "**/entrypoints/**"
-    ]
+    property "sonar.sourceEncoding", "UTF-8"
+    property "sonar.sources", "src/main/java,src/main/webapp,src/main/resources/static"
+    property 'sonar.coverage.exclusions', ["**/ServletInitializer*", "**/DemoApplication*"]
+    property 'sonar.exclusions', ["**/ServletInitializer*", "**/DemoApplication*"]
     property "sonar.import_unknown_files", true
     property "sonar.jacoco.reportPaths", fileTree(dir: project.projectDir, includes: ["**/*.exec", "**/*.ec"])
     property "sonar.test.exclusions", "**/test/*"
