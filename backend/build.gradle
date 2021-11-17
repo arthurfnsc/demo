@@ -1,77 +1,45 @@
-// Required gradle plugins.
 plugins {
-	id "org.springframework.boot" version "2.5.4"
-	id "io.spring.dependency-management" version "1.0.11.RELEASE"
-	id "org.sonarqube" version "3.1.1"
-	id "jacoco"
-	id "java"
-	id "war"
+  id "com.diffplug.spotless" version "$spotlessVersion" apply false
+  id "com.github.ben-manes.versions" version "$versionsVersion" apply false
+  id "io.spring.dependency-management" version "$springDependencyManagementVersion"
+  id "jacoco"
+  id "java"
+  id "org.owasp.dependencycheck" version "$dependencyCheckVersion" apply false
+  id "org.sonarqube" version "$sonarqubeVersion" apply false
+  id "org.springframework.boot" version "$springBootVersion"
 }
 
-// Sonarcloud service attributes.
-sonarqube {
-	properties {
-		property "sonar.projectKey", "fvilarinho_demo_backend"
-		property "sonar.organization", "fvilarinho"
-		property "sonar.host.url", "https://sonarcloud.io"
-		property "sonar.sources", "src/main/java,src/main/webapp,src/main/resources/static"
-		property 'sonar.exclusions', "**/ServletInitializer*"
-		property 'sonar.exclusions', ["**/ServletInitializer*", "**/DemoApplication*"]
-		property 'sonar.coverage.exclusions', ["**/ServletInitializer*", "**/DemoApplication*"]
-	}
-}
-
-// Sonarcloud task dependencies.
-tasks.named("sonarqube").configure {
-	dependsOn test
-}
-
-// Test coverage service attributes and dependencies.
-jacocoTestReport {
-	dependsOn test
-	reports {
-		xml.enabled true
-	}
-	afterEvaluate {
-		classDirectories.setFrom(files(classDirectories.files.collect {
-			fileTree(dir: it, exclude: [
-					"**/ServletInitializer*",
-					"**/DemoApplication*"
-			])
-		}))
-	}
-}
-
-// Test task dependencies.
-test {
-	finalizedBy jacocoTestReport
-}
-
-// Build attributes.
 group = "br.com.demo"
 version = "latest"
 sourceCompatibility = "11"
 
-// Default dependencies repository.
 repositories {
-	mavenCentral()
+  mavenCentral()
 }
 
-// List of dependencies.
+apply from: "$rootDir/backend/plugins/dependency-check.gradle"
+apply from: "$rootDir/backend/plugins/docs.gradle"
+apply from: "$rootDir/backend/plugins/jacoco.gradle"
+apply from: "$rootDir/backend/plugins/lint.gradle"
+apply from: "$rootDir/backend/plugins/sonarqube.gradle"
+
 dependencies {
-	implementation "org.springframework.boot:spring-boot-starter-data-jpa:2.5.5"
-	implementation "org.springframework.boot:spring-boot-starter-jersey:2.5.5"
-	implementation "org.springframework.boot:spring-boot-starter-web:2.5.5"
-	implementation "org.mariadb.jdbc:mariadb-java-client:2.7.4"
-	implementation "org.glassfish.jersey.core:jersey-common:2.35"
+  implementation "org.mariadb.jdbc:mariadb-java-client:$mariadbVersion"
+  implementation "org.glassfish.jersey.core:jersey-common:$jerseyVersion"
+  implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+  implementation "org.springframework.boot:spring-boot-starter-jersey"
+  implementation "org.springframework.boot:spring-boot-starter-web"
 
-	runtime "org.springframework.boot:spring-boot-starter-tomcat:2.5.5"
+  runtime "org.springframework.boot:spring-boot-starter-tomcat"
 
-	testImplementation "org.mockito:mockito-core:3.12.4"
-	testImplementation "org.springframework.boot:spring-boot-starter-test:2.5.5"
+  testImplementation "org.springframework.boot:spring-boot-starter-test"
 }
 
-// Default test platform.
 test {
-	useJUnitPlatform()
+  useJUnitPlatform()
+  maxParallelForks = Runtime.runtime.availableProcessors()
+  testLogging {
+    displayGranularity = 2
+    events("FAILED", "SKIPPED")
+  }
 }

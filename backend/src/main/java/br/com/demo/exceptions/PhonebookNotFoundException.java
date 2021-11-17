@@ -6,5 +6,4 @@ package br.com.demo.exceptions;
  * @author fvilarinho
  * @version 1.0.0
  */
-public class PhonebookNotFoundException extends Exception{
-}
+public class PhonebookNotFoundException extends Exception {}

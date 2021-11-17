@@ -1,0 +1,24 @@
+apply plugin: 'com.github.ben-manes.versions'
+apply plugin: 'project-report'
+
+def isNonStable = { String version ->
+  def stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { it -> version.toUpperCase().contains(it) }
+  def regex = /^[0-9,.v-]+(-r)?$/
+  return !stableKeyword && !(version ==~ regex)
+}
+
+tasks.named("dependencyUpdates").configure {
+  checkConstraints = true
+  outputFormatter = "json"
+  outputDir = "$rootDir/build/reports/docs/dependencyUpdates"
+  reportfileName = "report"
+
+  rejectVersionIf {
+    isNonStable(it.candidate.version)
+  }
+}
+
+htmlDependencyReport {
+
+  projects = project.allprojects
+}
