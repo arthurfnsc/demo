@@ -31,9 +31,9 @@ jobs:
     - name: Code Analysis - SAST (White-box testing)
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_HOST: ${{ secrets.SONAR_HOST }}
-        SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONARQUBE_HOST: ${{ secrets.SONARQUBE_HOST }}
+        SONARQUBE_ORGANIZATION: ${{ secrets.SONARQUBE_ORGANIZATION }}
+        SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
       run: ./codeAnalysis.sh
 
     - name: Libraries Analysis - SAST (White-box testing)
