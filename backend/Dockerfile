@@ -27,7 +27,7 @@ RUN addgroup -S group && \
 # Copy the essentials files to the work directory.
 COPY bin/startup.sh /home/user/bin
 COPY lib/contrast.jar /home/user/lib
-COPY build/libs/backend-latest-plain.war /home/user/lib/demo.war
+COPY build/libs/backend-latest-plain.jar /home/user/lib/demo.jar
 
 # Download Apache Tomcat and install it.
 RUN cd /opt && \
@@ -42,7 +42,7 @@ RUN cd /opt && \
     rm apache-tomcat-${TOMCAT_VERSION}.zip && \
     chmod +x /opt/apache-tomcat-${TOMCAT_VERSION}/bin/*.sh && \
     ln -s /opt/apache-tomcat-${TOMCAT_VERSION} /opt/apache-tomcat && \
-    ln -s /home/user/lib/demo.war /opt/apache-tomcat/webapps/demo.war
+    ln -s /home/user/lib/demo.jar /opt/apache-tomcat/webapps/demo.jar
 
 # Set the essentials permissions.
 RUN chown -R user:group /opt/apache-tomcat-${TOMCAT_VERSION} && \
