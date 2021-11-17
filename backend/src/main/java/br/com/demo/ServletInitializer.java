@@ -10,8 +10,9 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  * @version 1.0.0
  */
 public class ServletInitializer extends SpringBootServletInitializer {
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(DemoApplication.class);
-	}
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(DemoApplication.class);
+    }
 }

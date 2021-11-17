@@ -5,11 +5,10 @@ import br.com.demo.exceptions.PhonebookAlreadyExistsException;
 import br.com.demo.exceptions.PhonebookNotFoundException;
 import br.com.demo.model.Phonebook;
 import br.com.demo.persistence.PhonebookPersistence;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Class that defines the services with the business rules.
@@ -18,74 +17,73 @@ import java.util.Optional;
  * @version 1.0.0
  */
 @Service
-public class PhonebookService{
+public class PhonebookService {
+
     @Autowired
     private PhonebookPersistence persistence;
-    
-    public PhonebookService(){
+
+    public PhonebookService() {
         super();
     }
-    
-    public PhonebookService(PhonebookPersistence persistence){
+
+    public PhonebookService(PhonebookPersistence persistence) {
         this();
-        
         this.persistence = persistence;
     }
-    
+
     // List all data.
-    public List<Phonebook> list(){
+    public List<Phonebook> list() {
         return persistence.findAll();
     }
-    
+
     // Find a phonebook by id.
-    public Phonebook findById(Integer id) throws PhonebookNotFoundException{
-        int r = (int)(Math.random() * 100);
-        
-        
-        try{
+    public Phonebook findById(Integer id) throws PhonebookNotFoundException {
+        int r = (int) (Math.random() * 100);
+
+        try {
             Optional<Phonebook> result = persistence.findById(id);
-    
-            if(result.isPresent())
-                return result.get();
-    
+
+            if (result.isPresent()) return result.get();
+
             throw new PhonebookNotFoundException();
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new PhonebookNotFoundException();
         }
     }
-    
+
     // Find a phonebook by name.
-    public List<Phonebook> findByName(String name) { return persistence.findByName(name); }
-    
+    public List<Phonebook> findByName(String name) {
+        return persistence.findByName(name);
+    }
+
     // Find a phonebook that contains a part of the name.
-    public List<Phonebook> findByNameContaining(String name){
+    public List<Phonebook> findByNameContaining(String name) {
         return persistence.findByNameContaining(name);
     }
-    
+
     // Save a phonebook.
-    public Phonebook save(Phonebook phonebook) throws PhonebookAlreadyExistsException, PhonebookNotFoundException{
-        if(phonebook != null){
+    public Phonebook save(Phonebook phonebook) throws PhonebookAlreadyExistsException, PhonebookNotFoundException {
+        if (phonebook != null) {
             Integer id = phonebook.getId();
             String name = phonebook.getName();
             List<Phonebook> list = persistence.findByName(name);
-    
+
             PhonebookValidator.exists(list, id, name);
-    
+
             return persistence.save(phonebook);
         }
-    
+
         throw new PhonebookNotFoundException();
     }
-    
+
     // Delete a phonebook.
-    public void delete(Phonebook phonebook) throws PhonebookNotFoundException{
-        if(phonebook != null){
+    public void delete(Phonebook phonebook) throws PhonebookNotFoundException {
+        if (phonebook != null) {
             persistence.delete(phonebook);
-            
+
             return;
         }
-        
+
         throw new PhonebookNotFoundException();
     }
 }

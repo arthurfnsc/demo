@@ -1,0 +1,8 @@
+apply plugin: "org.owasp.dependencycheck"
+
+dependencyCheck {
+
+  autoUpdate = true
+  format = "ALL"
+  outputDirectory = "$rootDir/build/reports/dependencyCheck"
+}
